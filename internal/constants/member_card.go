@@ -35,7 +35,7 @@ func MemberCardTypeText(t string) string {
 	case MemberCardTypeQuarter:
 		return "季卡"
 	case MemberCardTypeYear:
-		return "年卡"
+		return "月卡"
 	default:
 		return "未知"
 	}
@@ -49,7 +49,7 @@ func MemberCardMonths(t string) int {
 	case MemberCardTypeQuarter:
 		return 3
 	case MemberCardTypeYear:
-		return 12
+		return 1
 	default:
 		return 0
 	}
@@ -63,7 +63,7 @@ func MemberCardPrice(t string) float64 {
 	case MemberCardTypeQuarter:
 		return 269
 	case MemberCardTypeYear:
-		return 899
+		return 99
 	default:
 		return 0
 	}

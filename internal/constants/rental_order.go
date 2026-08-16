@@ -11,7 +11,7 @@ const (
 
 // RentalOrderStatuses lists all valid rental statuses in flow order.
 var RentalOrderStatuses = []string{
-	RentalOrderStatusPending, RentalOrderStatusRenting, RentalOrderStatusReturned,
+	RentalOrderStatusPending, RentalOrderStatusRenting,
 	RentalOrderStatusCompleted, RentalOrderStatusCancelled,
 }
 
@@ -29,7 +29,7 @@ func IsRentalOrderStatus(s string) bool {
 func RentalOrderStatusText(s string) string {
 	switch s {
 	case RentalOrderStatusPending:
-		return "待确认"
+		return "已完成"
 	case RentalOrderStatusRenting:
 		return "租赁中"
 	case RentalOrderStatusReturned:
