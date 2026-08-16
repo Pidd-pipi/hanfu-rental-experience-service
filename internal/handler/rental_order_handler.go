@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"net/http"
 
@@ -39,7 +40,7 @@ func (h *RentalOrderHandler) Create(c *gin.Context) {
 	}
 	order, err := h.svc.Create(c.Request.Context(), user, &req)
 	if err != nil {
-		c.Error(err)
+		c.Error(fmt.Errorf("handler rental order create: %v", err))
 		return
 	}
 	util.OK(c, order)
