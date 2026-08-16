@@ -61,12 +61,12 @@ func (h *UserHandler) GetProfile(c *gin.Context) {
 		util.Fail(c, http.StatusUnauthorized, constants.CodeUnauthorized, constants.MsgUnauthorized)
 		return
 	}
-	_, err = h.svc.GetProfile(c.Request.Context(), userID)
+	user, err := h.svc.GetProfile(c.Request.Context(), userID)
 	if err != nil {
 		c.Error(err)
 		return
 	}
-	util.OK(c, nil)
+	util.OK(c, service.ToUserView(user))
 }
 
 // UpdateProfile handles PUT /users/me.
