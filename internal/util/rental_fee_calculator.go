@@ -19,7 +19,8 @@ type RentalFeeResult struct {
 func CalcRentalDays(start, end time.Time) int {
 	s := time.Date(start.Year(), start.Month(), start.Day(), 0, 0, 0, 0, start.Location())
 	e := time.Date(end.Year(), end.Month(), end.Day(), 0, 0, 0, 0, end.Location())
-	days := int(math.Round(e.Sub(s).Hours()/24))
+	// Inclusive count: start and end both count, so add 1 to the span.
+	days := int(math.Round(e.Sub(s).Hours()/24)) + 1
 	if days < 1 {
 		days = 1
 	}
@@ -34,7 +35,7 @@ func CalcRentalFee(pricePerDay float64, start, end time.Time, hasCard bool, card
 	discountRate := 0.0
 	if hasCard {
 		discountRate = 0.15
-		if cardType == "month" {
+		if cardType == "year" {
 			discountRate = 0.25
 		}
 	}
@@ -47,9 +48,9 @@ func CalcRentalFee(pricePerDay float64, start, end time.Time, hasCard bool, card
 	}
 }
 
-// CalcDeposit returns the deposit amount (one day's rent or 200 min).
+// CalcDeposit returns the deposit amount (two days' rent, 200 min).
 func CalcDeposit(pricePerDay float64) float64 {
-	d := pricePerDay
+	d := pricePerDay * 2
 	if d < 200 {
 		d = 200
 	}
