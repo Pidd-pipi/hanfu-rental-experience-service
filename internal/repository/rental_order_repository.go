@@ -46,7 +46,7 @@ func (r *RentalOrderRepository) ListByUser(ctx context.Context, userID uint, pag
 		return nil, 0, err
 	}
 	var items []model.RentalOrder
-	err := q.Order("created_at DESC").Offset(page * pageSize).Limit(pageSize).Find(&items).Error
+	err := q.Order("created_at DESC").Offset((page - 1) * pageSize).Limit(pageSize).Find(&items).Error
 	if err != nil {
 		return nil, 0, err
 	}
@@ -61,7 +61,7 @@ func (r *RentalOrderRepository) ListAll(ctx context.Context, page, pageSize int)
 		return nil, 0, err
 	}
 	var items []model.RentalOrder
-	err := q.Order("created_at DESC").Offset(page * pageSize).Limit(pageSize).Find(&items).Error
+	err := q.Order("created_at DESC").Offset((page - 1) * pageSize).Limit(pageSize).Find(&items).Error
 	if err != nil {
 		return nil, 0, err
 	}
