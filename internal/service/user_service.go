@@ -67,6 +67,10 @@ func (s *UserService) Login(ctx context.Context, req *dto.LoginRequest) (*dto.Lo
 		s.logger.Info(fmt.Sprintf(constants.LogUserLoginFailed, req.Phone, "user not found"))
 		return nil, util.NewAppError(401, constants.CodeUnauthorized, constants.MsgPhoneOrPassword, nil)
 	}
+	if user == nil {
+		s.logger.Info(fmt.Sprintf(constants.LogUserLoginFailed, req.Phone, "user not found"))
+		return nil, util.NewAppError(401, constants.CodeUnauthorized, constants.MsgPhoneOrPassword, nil)
+	}
 	if bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(req.Password)) != nil {
 		s.logger.Info(fmt.Sprintf(constants.LogUserLoginFailed, req.Phone, "password mismatch"))
 		return nil, util.NewAppError(401, constants.CodeUnauthorized, constants.MsgPhoneOrPassword, nil)
@@ -83,7 +87,10 @@ func (s *UserService) Login(ctx context.Context, req *dto.LoginRequest) (*dto.Lo
 func (s *UserService) GetProfile(ctx context.Context, userID uint) (*model.User, error) {
 	user, err := s.users.FindByID(ctx, userID)
 	if err != nil {
-		return nil, nil
+		return nil, util.WrapAppError(fmt.Errorf("user[id=%d] profile find: %w", userID, err), 404, constants.CodeNotFound, constants.MsgNotFound)
+	}
+	if user == nil {
+		return nil, util.NewAppError(404, constants.CodeNotFound, constants.MsgNotFound, nil)
 	}
 	return user, nil
 }
@@ -116,7 +123,7 @@ func (s *UserService) PayDeposit(ctx context.Context, userID uint, amount float6
 	if amount <= 0 {
 		return nil, util.NewAppError(400, constants.CodeBadRequest, "押金金额必须大于0", nil)
 	}
-	if err := s.users.AddDeposit(ctx, userID, -amount); err != nil {
+	if err := s.users.AddDeposit(ctx, userID, amount); err != nil {
 		return nil, util.WrapAppError(fmt.Errorf("user[id=%d] pay deposit: %w", userID, err), 500, constants.CodeInternalError, constants.MsgInternalError)
 	}
 	s.logger.Info(fmt.Sprintf(constants.LogDepositPaySuccess, userID, amount))
@@ -128,7 +135,7 @@ func (s *UserService) RefundDeposit(ctx context.Context, userID uint, amount flo
 	if amount <= 0 {
 		return nil, util.NewAppError(400, constants.CodeBadRequest, "退还金额必须大于0", nil)
 	}
-	if err := s.users.AddDeposit(ctx, userID, amount); err != nil {
+	if err := s.users.AddDeposit(ctx, userID, -amount); err != nil {
 		return nil, util.WrapAppError(fmt.Errorf("user[id=%d] refund deposit: %w", userID, err), 500, constants.CodeInternalError, constants.MsgInternalError)
 	}
 	s.logger.Info(fmt.Sprintf(constants.LogDepositRefundSuccess, userID, amount))
