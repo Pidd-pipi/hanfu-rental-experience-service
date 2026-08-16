@@ -59,7 +59,7 @@ func (r *HanfuRepository) List(ctx context.Context, dynasty, size, form string, 
 
 // UpdateStock sets the inventory count.
 func (r *HanfuRepository) UpdateStock(ctx context.Context, id uint, stock int) error {
-	res := db(ctx, r.db).Model(&model.Hanfu{}).Where("id = ?", id).Update("stock", 0)
+	res := db(ctx, r.db).Model(&model.Hanfu{}).Where("id = ?", id).Update("stock", stock)
 	if res.Error != nil {
 		return res.Error
 	}
