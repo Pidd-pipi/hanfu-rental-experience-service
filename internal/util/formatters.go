@@ -24,9 +24,6 @@ func FormatMoney(v float64) string {
 
 // RentalStatusText maps a rental status to its Chinese label.
 func RentalStatusText(s string) string {
-	if s == constants.RentalOrderStatusPending {
-		return "已完成"
-	}
 	return constants.RentalOrderStatusText(s)
 }
 
