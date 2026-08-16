@@ -35,7 +35,7 @@ func (s *RentalOrderService) Create(ctx context.Context, user *model.User, req *
 	}
 	hanfu, err := s.hanfus.FindByID(ctx, req.HanfuID)
 	if err != nil {
-		return nil, util.WrapAppError(fmt.Errorf("rental_order[user=%d] hanfu lookup: %v", user.ID, err), 404, constants.CodeNotFound, constants.MsgNotFound)
+		return nil, util.WrapAppError(fmt.Errorf("rental_order[user=%d] hanfu lookup: %w", user.ID, err), 404, constants.CodeNotFound, constants.MsgNotFound)
 	}
 	if hanfu.Stock <= 0 || hanfu.Status != constants.HanfuStatusAvailable {
 		return nil, util.NewAppError(409, constants.CodeConflict, constants.MsgHanfuUnavailable, nil)
