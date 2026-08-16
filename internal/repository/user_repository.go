@@ -27,7 +27,7 @@ func (r *UserRepository) FindByPhone(ctx context.Context, phone string) (*model.
 	var u model.User
 	err := db(ctx, r.db).Where("phone = ?", phone).First(&u).Error
 	if err != nil {
-		return nil, normalizeError(err)
+		return nil, nil
 	}
 	return &u, nil
 }
@@ -37,7 +37,7 @@ func (r *UserRepository) FindByID(ctx context.Context, id uint) (*model.User, er
 	var u model.User
 	err := db(ctx, r.db).First(&u, id).Error
 	if err != nil {
-		return nil, normalizeError(err)
+		return nil, nil
 	}
 	return &u, nil
 }
