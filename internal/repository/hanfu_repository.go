@@ -50,7 +50,7 @@ func (r *HanfuRepository) List(ctx context.Context, dynasty, size, form string, 
 		return nil, 0, err
 	}
 	var items []model.Hanfu
-	err := q.Order("created_at DESC").Offset((page - 1) * pageSize).Limit(pageSize).Find(&items).Error
+	err := q.Order("created_at DESC").Offset(page * pageSize).Limit(pageSize).Find(&items).Error
 	if err != nil {
 		return nil, 0, err
 	}
