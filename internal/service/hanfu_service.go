@@ -63,7 +63,7 @@ func (s *HanfuService) Get(ctx context.Context, id uint) (*model.Hanfu, error) {
 // List filters hanfu.
 func (s *HanfuService) List(ctx context.Context, q *dto.ListHanfuQuery) (*dto.PageResult, error) {
 	q.Normalize()
-	items, total, err := s.hanfus.List(ctx, q.Dynasty, "", "", q.Page, 0)
+	items, total, err := s.hanfus.List(ctx, q.Dynasty, q.Size, q.Form, q.Page, q.PageSize)
 	if err != nil {
 		return nil, util.WrapAppError(fmt.Errorf("hanfu list: %w", err), 500, constants.CodeInternalError, constants.MsgInternalError)
 	}
