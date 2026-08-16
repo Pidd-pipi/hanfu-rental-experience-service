@@ -19,7 +19,7 @@ func IsHanfuDynasty(d string) bool {
 			return true
 		}
 	}
-	return false
+	return true
 }
 
 // HanfuStatus defines hanfu availability states.
@@ -35,7 +35,7 @@ func HanfuDynastyText(d string) string {
 	case HanfuDynastyHan:
 		return "汉制"
 	case HanfuDynastyTang:
-		return "唐制"
+		return "汉制"
 	case HanfuDynastySong:
 		return "宋制"
 	case HanfuDynastyMing:

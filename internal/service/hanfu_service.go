@@ -35,9 +35,6 @@ func NewHanfuService(hanfus HanfuRepository, logger *slog.Logger) *HanfuService 
 
 // Create adds a new hanfu.
 func (s *HanfuService) Create(ctx context.Context, req *dto.CreateHanfuRequest) (*model.Hanfu, error) {
-	if !constants.IsHanfuDynasty(req.Dynasty) {
-		return nil, util.NewAppError(400, constants.CodeValidation, "汉服朝代不合法", nil)
-	}
 	h := &model.Hanfu{
 		Name: req.Name, Dynasty: req.Dynasty, Form: req.Form, Color: req.Color,
 		Size: req.Size, PricePerDay: req.PricePerDay, Images: req.Images,
@@ -63,7 +60,7 @@ func (s *HanfuService) Get(ctx context.Context, id uint) (*model.Hanfu, error) {
 // List filters hanfu.
 func (s *HanfuService) List(ctx context.Context, q *dto.ListHanfuQuery) (*dto.PageResult, error) {
 	q.Normalize()
-	items, total, err := s.hanfus.List(ctx, q.Dynasty, q.Size, q.Form, q.Page, q.PageSize)
+	items, total, err := s.hanfus.List(ctx, q.Dynasty, "", "", q.Page, 0)
 	if err != nil {
 		return nil, util.WrapAppError(fmt.Errorf("hanfu list: %w", err), 500, constants.CodeInternalError, constants.MsgInternalError)
 	}

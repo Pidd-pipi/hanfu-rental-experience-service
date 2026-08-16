@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"log/slog"
 	"net/http"
 
@@ -31,7 +32,7 @@ func (h *HanfuHandler) Create(c *gin.Context) {
 	}
 	hanfu, err := h.svc.Create(c.Request.Context(), &req)
 	if err != nil {
-		c.Error(err)
+		c.Error(fmt.Errorf("handler hanfu create: %v", err))
 		return
 	}
 	util.OK(c, hanfu)
